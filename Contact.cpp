@@ -11,6 +11,7 @@ using namespace std;
 
 #include "Contact.h"
 
+//default contructor for the Contact class
 Contact::Contact(){
    contactType = 'U';
    firstName = "Unset";
@@ -24,7 +25,10 @@ Contact::Contact(){
    postalCode = -1;
 }
 
+/*Constructor for the Contact class
+Constructs the object with the value of contactType, firstName, and lastName initialized*/
 Contact::Contact(char contact_type, string first_name, string last_name){
+   
    contactType = contact_type;
    firstName = first_name;
    lastName = last_name;
@@ -37,6 +41,8 @@ Contact::Contact(char contact_type, string first_name, string last_name){
    postalCode = -1;
 }
 
+/*Third constructor for the Contact class
+Initializes the data member contactType and adds 2 phone numbers*/
 Contact::Contact(string phone, string cell, char contact_type){
 
    contactType = contact_type;
@@ -65,10 +71,12 @@ Contact::Contact(string phone, string cell, char contact_type){
 
 }
 
+//Sets the email for the contact
 void Contact::setEmail(string emailAddr){
    email = emailAddr;
 }
 
+//sets the address for the contact
 void Contact::setAddress(int streetNum, string street_name, string city_name, string state_name, int postal_code){
    streetNumber = streetNum;
    streetName = street_name;
@@ -77,6 +85,7 @@ void Contact::setAddress(int streetNum, string street_name, string city_name, st
    postalCode = postal_code;
 }
 
+//returns the address as a string
 string Contact::getAddress() const {
    string address = "";
    address += to_string(streetNumber) + " ";
@@ -88,19 +97,27 @@ string Contact::getAddress() const {
    return address;
 }
 
+//returns the name of the contact as a string
 string Contact::getName() const {
    return getLastName() + ", " + getFirstName();
 }
 
+//This function adds a new phone number to the contact
 string Contact::addPhone(char type, string new_number){
    string message;
 
-   if (type == 'W' || type == 'H' || type == 'C'){
-      struct PhoneNumbers newPhoneNumber;
+   if (type == 'W' || type == 'H' || type == 'C'){ //checks if the phone type is valid
+      
+      struct PhoneNumbers newPhoneNumber; //declares a new PhoneNumbers object
+      
+      //sets the phone number and type
       newPhoneNumber.phoneType = type;
       newPhoneNumber.phone_number = new_number;
-      phoneNumbers.push_back(newPhoneNumber);
+      phoneNumbers.push_back(newPhoneNumber); //adds the phone number to the vector
+      
       string new_type;
+      
+      //switch case statements to help construct the return message
       switch(type){
          case 'W':
             new_type = "Work";
@@ -114,9 +131,9 @@ string Contact::addPhone(char type, string new_number){
       }
 
       message = "success: added number " + new_number + " " + new_type;
-      return message;
+      return message; //return message
    }
-   else{
+   else{ //returns error message if invalid phone type
       message = "failure: invalid phone type - ";
       message.push_back(type);
       return message;
@@ -124,17 +141,21 @@ string Contact::addPhone(char type, string new_number){
 
 }
 
+/*This function deletes a PhoneNumbers object from the phoneNumbers vector
+Takes in one parameter: an integer indicating index to delete*/
 string Contact::deletePhone(int phoneIdx){
    int size =  phoneNumbers.size();
-   if (phoneIdx < 0 || phoneIdx >= size){
-      return  "failure: unable to delete phone " + to_string(phoneIdx);
+   
+   if (phoneIdx < 0 || phoneIdx >= size){ //checks if the index is invalid
+      return  "failure: unable to delete phone " + to_string(phoneIdx); //error message
    }
-   else{
+   else{ //deletes the element from phoneNumbers and returns a success message
       phoneNumbers.erase(phoneNumbers.begin() + phoneIdx);
       return "success: deleted phone " + to_string(phoneIdx);
    }
 }
 
+//this functions returns a contact's information as a string
 string Contact::getAsString() const{
    string full_contact = "";
 
@@ -163,6 +184,7 @@ string Contact::getAsString() const{
    return full_contact;
 }
 
+//this function returns a vector of all phone numbers associated with the contact
 vector<string> Contact::getPhoneNumbers() {
   vector<string> numbers;
 
@@ -174,6 +196,7 @@ vector<string> Contact::getPhoneNumbers() {
   
 }
 
+//This is a helper function that returns the phone type's full label
 string Contact::getLabelForType (char type) {
   string result;
   
@@ -198,10 +221,12 @@ string Contact::getLabelForType (char type) {
   
 }
 
+//overload of the < operator for two Contact objects
 bool operator<(const Contact& lhs, const Contact& rhs){
    return lhs.getName() < rhs.getName(); 
 }
 
+//overload of the == operator for two Contact objects
 bool operator==(const Contact& lhs, const Contact& rhs){
    return lhs.getName() == rhs.getName();
 }
